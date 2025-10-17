@@ -44,13 +44,6 @@ def say_hello(request):
         total_sum=Sum(ExpressionWrapper((F'orderitem__quantity') * F('orderitem__unit_price'), output_field=DecimalField())
     )).order_by('total_sum')[:5]
 
-    content_type = ContentType.objects.get_for_model(Product)
+    tag_query_set = TaggedItem.objects.get_tags_for(Product,1)
 
-    TaggedItem.objects.filter(
-        content_type=content_type,
-        object_id=1
-    )
-
-
-
-    return render(request, 'hello.html', {'name': 'Smith', 'products': arithmetic})
+    return render(request, 'hello.html', {'name': 'Smith', 'products': list(tag_query_set)})
