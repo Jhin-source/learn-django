@@ -2,6 +2,8 @@ from django.shortcuts import render
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q, F, Count, Max, Min, Avg, Sum, Func, Value, ExpressionWrapper, DecimalField
 from store.models import Product, Customer, Collection, Order, OrderItem
+from django.contrib.contenttypes.models import ContentType
+from tags.models import TaggedItem
 
 def say_hello(request):
     customer_query_set = Customer.objects.filter(email__icontains='.com')
@@ -41,6 +43,13 @@ def say_hello(request):
     top_5_best_selling = Product.objects.annotate(
         total_sum=Sum(ExpressionWrapper((F'orderitem__quantity') * F('orderitem__unit_price'), output_field=DecimalField())
     )).order_by('total_sum')[:5]
+
+    content_type = ContentType.objects.get_for_model(Product)
+
+    TaggedItem.objects.filter(
+        content_type=content_type,
+        object_id=1
+    )
 
 
 
