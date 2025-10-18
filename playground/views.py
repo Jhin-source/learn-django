@@ -57,5 +57,7 @@ def say_hello(request):
     with transaction.atomic():
         order = Order()
         order.customer_id = 1
+    
+    Product.objects.raw('SELECT * FROM store_product')
 
     return render(request, 'hello.html', {'name': 'Smith', 'products': list(tag_query_set)})
