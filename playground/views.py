@@ -1,7 +1,8 @@
 from django.shortcuts import render
+from django.db import transaction
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q, F, Count, Max, Min, Avg, Sum, Func, Value, ExpressionWrapper, DecimalField
-from store.models import Product, Customer, Collection, Order, OrderItem
+from store.models import Product, Customer, Collection, Order, OrderItem, Cart, CartItem
 from django.contrib.contenttypes.models import ContentType
 from tags.models import TaggedItem
 
@@ -53,7 +54,8 @@ def say_hello(request):
     # collection.save()
     # or use Collection.objects.create() for insert
     # Collection.objects.update for update without read first
-
-    collection = Collection(pk=11)
+    with transaction.atomic():
+        order = Order()
+        order.customer_id = 1
 
     return render(request, 'hello.html', {'name': 'Smith', 'products': list(tag_query_set)})
