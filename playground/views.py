@@ -46,4 +46,14 @@ def say_hello(request):
 
     tag_query_set = TaggedItem.objects.get_tags_for(Product,1)
 
+    # insert/update object
+    # collection = Collection()
+    # collection.title = 'Video Games'
+    # collection.featured_product = Product(pk=1)
+    # collection.save()
+    # or use Collection.objects.create() for insert
+    # Collection.objects.update for update without read first
+
+    collection = Collection(pk=11)
+
     return render(request, 'hello.html', {'name': 'Smith', 'products': list(tag_query_set)})
